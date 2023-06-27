@@ -3,7 +3,6 @@ package com.sparta.myblog.controller;
 import com.sparta.myblog.dto.MyblogRequestDto;
 import com.sparta.myblog.dto.MyblogResponseDto;
 import com.sparta.myblog.service.MyblogService;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,8 +13,8 @@ public class MyblogController {
 
     private final MyblogService myblogService;
 
-    public MyblogController(JdbcTemplate jdbcTemplate){
-        this.myblogService = new MyblogService(jdbcTemplate);
+    public MyblogController(MyblogService myblogService){
+        this.myblogService = myblogService;
     }
     @PostMapping("/blog")
     public MyblogResponseDto createMyblog(@RequestBody MyblogRequestDto requestDto){

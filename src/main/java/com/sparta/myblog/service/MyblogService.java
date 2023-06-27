@@ -4,15 +4,14 @@ import com.sparta.myblog.dto.MyblogRequestDto;
 import com.sparta.myblog.dto.MyblogResponseDto;
 import com.sparta.myblog.entity.Myblog;
 import com.sparta.myblog.repository.MyblogRepository;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
 public class MyblogService {
     private final MyblogRepository myblogRepository;
 
-    public MyblogService(JdbcTemplate jdbcTemplate){
-        this.myblogRepository = new MyblogRepository(jdbcTemplate);
+    public MyblogService(MyblogRepository myblogRepository){
+        this.myblogRepository = myblogRepository;
     }
 
     public MyblogResponseDto createMyblog(MyblogRequestDto requestDto) {
