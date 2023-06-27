@@ -21,4 +21,11 @@ public class Myblog {
         this.contents = requestDto.getContents();
         this.password = requestDto.getPassword();
     }
+
+    public void update(MyblogRequestDto requestDto) {
+        this.username = requestDto.getUsername();
+        this.title = requestDto.getTitle();
+        this.contents = requestDto.getContents();
+        this.password = requestDto.getPassword();
+    }
 }

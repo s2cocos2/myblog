@@ -42,4 +42,31 @@ public class MyblogController {
         return responseList;
     }
 
+    @PutMapping("/blog/{id}")
+    public Long updateMyblog(@PathVariable Long id, @RequestBody MyblogRequestDto requestDto){
+        //해당 글이 DB에 존재하는지 확인
+        if(myblogList.containsKey(id)){
+            //해당 글 가져오기
+            Myblog myblog = myblogList.get(id);
+
+            //글 수정
+            myblog.update(requestDto);
+            return myblog.getId();
+        } else {
+            throw new IllegalArgumentException("선택한 글은 존재하지 않습니다.");
+        }
+    }
+
+    @DeleteMapping("/blog/{id}")
+    public Long deleteMyblog(@PathVariable Long id){
+        //해당 글이 DB에 존재하는지 확인
+        if(myblogList.containsKey(id)){
+            //해당 글 삭제하기
+            myblogList.remove(id);
+            return id;
+        } else {
+            throw new IllegalArgumentException("선택한 글은 존재하지 않습니다.");
+        }
+    }
+
 }
