@@ -5,6 +5,7 @@ import com.sparta.myblog.dto.MyblogResponseDto;
 import com.sparta.myblog.entity.Myblog;
 import com.sparta.myblog.repository.MyblogRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,32 +32,32 @@ public class MyblogService {
 
     public List<MyblogResponseDto> getMyblog() {
         //DB 조회
-        return myblogRepository.findAll();
+        return myblogRepository.findAll().stream().map(MyblogResponseDto::new).toList();
     }
 
+    @Transactional
     public Long updateMyblog(Long id, MyblogRequestDto requestDto) {
         //해당 글이 DB에 존재하는지 확인
-        Myblog myblog = myblogRepository.findById(id);
-        if(myblog != null){
-            //글 내용 수정
-            myblogRepository.update(id, requestDto);
+        Myblog myblog = findMyblog(id);
 
-            return id;
-        } else {
-            throw new IllegalArgumentException("선택한 글은 존재하지 않습니다.");
-        }
+        //글 내용 수정
+        myblog.update(requestDto);
+
+        return id;
     }
 
     public Long deleteMyblog(Long id) {
         //해당 글이 DB에 존재하는지 확인
-        Myblog myblog = myblogRepository.findById(id);
-        if(myblog != null){
-            //해당 글 삭제하기
-            myblogRepository.delete(id);
+        Myblog myblog = findMyblog(id);
 
-            return id;
-        } else {
-            throw new IllegalArgumentException("선택한 글은 존재하지 않습니다.");
-        }
+        //해당 글 삭제하기
+        myblogRepository.delete(myblog);
+
+        return id;
+    }
+
+    private Myblog findMyblog(Long id){
+        return myblogRepository.findById(id).orElseThrow(()->
+                new IllegalArgumentException("선택한 글은 존재하지 않습니다."));
     }
 }
