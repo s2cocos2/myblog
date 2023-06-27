@@ -18,4 +18,12 @@ public class MyblogResponseDto {
         this.contents = myblog.getContents();
         this.password = myblog.getPassword();
     }
+
+    public MyblogResponseDto(Long id, String username, String contents, String password, String title) {
+        this.id = id;
+        this.password = password;
+        this.username = username;
+        this.title = title;
+        this.contents = contents;
+    }
 }
