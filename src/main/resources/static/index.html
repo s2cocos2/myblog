@@ -256,27 +256,28 @@
 
         // 메모를 불러와서 보여줍니다.
         function getMessages() {
-            // 1. 기존 메모 내용을 지웁니다.
+            // 1. 기존 글 내용을 지웁니다.
             $('#cards-box').empty();
-            // 2. 메모 목록을 불러와서 HTML로 붙입니다.
+            // 2. 글 목록을 불러와서 HTML로 붙입니다.
             $.ajax({
                 type: 'GET',
-                url: '/api/memos',
+                url: '/api/blog',
                 success: function (response) {
                     for (let i = 0; i < response.length; i++) {
                         let message = response[i];
                         let id = message['id'];
+                        let title = message['title'];
                         let username = message['username'];
                         let contents = message['contents'];
                         let modifiedAt = message['modifiedAt'];
-                        addHTML(id, username, contents, modifiedAt);
+                        addHTML(id, title, username, contents, modifiedAt);
                     }
                 }
             })
         }
 
-        // 메모 하나를 HTML로 만들어서 body 태그 내 원하는 곳에 붙입니다.
-        function addHTML(id, username, contents, modifiedAt) {
+        // 글 하나를 HTML로 만들어서 body 태그 내 원하는 곳에 붙입니다.
+        function addHTML(id, title, username, contents, modifiedAt) {
             // 1. HTML 태그를 만듭니다.
             let tempHtml = `<div class="card">
                 <!-- date/username 영역 -->
@@ -286,6 +287,15 @@
                     </div>
                     <div id="${id}-username" class="username">
                         ${username}
+                    </div>
+                </div>
+                <!-- title 조회/수정 영역-->
+                <div class="title">
+                    <div id="${id}-title" class="text">
+                        ${title}
+                    </div>
+                    <div id="${id}-editarea" class="edit">
+                        <textarea id="${id}-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
                     </div>
                 </div>
                 <!-- contents 조회/수정 영역-->
@@ -310,10 +320,10 @@
 
         // 메모를 생성합니다.
         function writePost() {
-            // 1. 작성한 메모를 불러옵니다.
+            // 1. 작성한 글을 불러옵니다.
             let contents = $('#contents').val();
 
-            // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
+            // 2. 작성한 글이 올바른지 isValidContents 함수를 통해 확인합니다.
             if (isValidContents(contents) == false) {
                 return;
             }
@@ -321,12 +331,12 @@
             let username = genRandomName(10);
 
             // 4. 전달할 data JSON으로 만듭니다.
-            let data = {'username': username, 'contents': contents};
+            let data = {'username': username, 'contents': contents, 'title':title};
 
             // 5. POST /api/memos 에 data를 전달합니다.
             $.ajax({
                 type: "POST",
-                url: "/api/memos",
+                url: "/api/blog",
                 contentType: "application/json",
                 data: JSON.stringify(data),
                 success: function (response) {
@@ -336,11 +346,12 @@
             });
         }
 
-        // 메모를 수정합니다.
+        // 글을 수정합니다.
         function submitEdit(id) {
-            // 1. 작성 대상 메모의 username과 contents 를 확인합니다.
+            // 1. 작성 대상 글의 username과 title, contents 를 확인합니다.
             let username = $(`#${id}-username`).text().trim();
             let contents = $(`#${id}-textarea`).val().trim();
+            // let title = $(`#${id}-textarea`).val().trim();
 
             // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
             if (isValidContents(contents) == false) {
@@ -348,12 +359,12 @@
             }
 
             // 3. 전달할 data JSON으로 만듭니다.
-            let data = {'username': username, 'contents': contents};
+            let data = {'username': username, 'contents': contents, 'title':title};
 
-            // 4. PUT /api/memos/{id} 에 data를 전달합니다.
+            // 4. PUT /api/blog/{id} 에 data를 전달합니다.
             $.ajax({
                 type: "PUT",
-                url: `/api/memos/${id}`,
+                url: `/api/blog/${id}`,
                 contentType: "application/json",
                 data: JSON.stringify(data),
                 success: function (response) {
@@ -368,7 +379,7 @@
             // 1. DELETE /api/memos/{id} 에 요청해서 메모를 삭제합니다.
             $.ajax({
                 type: "DELETE",
-                url: `/api/memos/${id}`,
+                url: `/api/blog/${id}`,
                 success: function (response) {
                     alert('메시지 삭제에 성공하였습니다.');
                     window.location.reload();
@@ -387,13 +398,13 @@
 </div>
 <div class="wrap">
     <div class="header">
-        <h2>Memo</h2>
+        <h2>My Blog</h2>
         <p>
-            공유하고 싶은 소식을 입력해주세요.
+            공유하고 싶은 글을 입력해주세요.
         </p>
     </div>
     <div class="area-write">
-        <textarea class="field" placeholder="공유하고 싶은 소식을 입력해주세요" name="contents" id="contents" cols="30"
+        <textarea class="field" placeholder="공유하고 싶은 글을 입력해주세요" name="contents" id="contents" cols="30"
                   rows="10"></textarea>
         <!--            <button class="btn btn-danger" onclick="writePost()">작성하기</button>-->
         <img src="images/send.png" alt="" onclick="writePost()">
@@ -410,6 +421,7 @@
                 </div>
             </div>
             <!-- contents 조회/수정 영역-->
+            <div class="title">
             <div class="contents">
 
             </div>
@@ -421,6 +433,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 
