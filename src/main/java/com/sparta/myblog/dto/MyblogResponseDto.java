@@ -3,6 +3,8 @@ package com.sparta.myblog.dto;
 import com.sparta.myblog.entity.Myblog;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class MyblogResponseDto {
     private Long id;
@@ -10,6 +12,8 @@ public class MyblogResponseDto {
     private String username;
     private String contents;
     private String password;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
     public MyblogResponseDto(Myblog myblog) {
         this.id = myblog.getId();
@@ -17,13 +21,7 @@ public class MyblogResponseDto {
         this.username = myblog.getUsername();
         this.contents = myblog.getContents();
         this.password = myblog.getPassword();
-    }
-
-    public MyblogResponseDto(Long id, String username, String contents, String password, String title) {
-        this.id = id;
-        this.password = password;
-        this.username = username;
-        this.title = title;
-        this.contents = contents;
+        this.createdAt = myblog.getCreatedAt();
+        this.modifiedAt = myblog.getModifiedAt();
     }
 }
