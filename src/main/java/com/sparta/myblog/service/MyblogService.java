@@ -4,9 +4,11 @@ import com.sparta.myblog.dto.MyblogRequestDto;
 import com.sparta.myblog.dto.MyblogResponseDto;
 import com.sparta.myblog.entity.Myblog;
 import com.sparta.myblog.repository.MyblogRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class MyblogService {
     private final MyblogRepository myblogRepository;
 
