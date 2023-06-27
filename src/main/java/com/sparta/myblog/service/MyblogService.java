@@ -9,10 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 
 public class MyblogService {
-    private final JdbcTemplate jdbcTemplate;
+    private final MyblogRepository myblogRepository;
 
     public MyblogService(JdbcTemplate jdbcTemplate){
-        this.jdbcTemplate = jdbcTemplate;
+        this.myblogRepository = new MyblogRepository(jdbcTemplate);
     }
 
     public MyblogResponseDto createMyblog(MyblogRequestDto requestDto) {
@@ -20,7 +20,6 @@ public class MyblogService {
         Myblog myblog = new Myblog(requestDto);
 
         //DB 저장
-        MyblogRepository myblogRepository = new MyblogRepository(jdbcTemplate);
         Myblog saveMyblog = myblogRepository.save(myblog);
 
         //Entity -> ResponseDto
@@ -31,12 +30,10 @@ public class MyblogService {
 
     public List<MyblogResponseDto> getMyblog() {
         //DB 조회
-        MyblogRepository myblogRepository = new MyblogRepository(jdbcTemplate);
         return myblogRepository.findAll();
     }
 
     public Long updateMyblog(Long id, MyblogRequestDto requestDto) {
-        MyblogRepository myblogRepository = new MyblogRepository(jdbcTemplate);
         //해당 글이 DB에 존재하는지 확인
         Myblog myblog = myblogRepository.findById(id);
         if(myblog != null){
@@ -50,7 +47,6 @@ public class MyblogService {
     }
 
     public Long deleteMyblog(Long id) {
-        MyblogRepository myblogRepository = new MyblogRepository(jdbcTemplate);
         //해당 글이 DB에 존재하는지 확인
         Myblog myblog = myblogRepository.findById(id);
         if(myblog != null){
