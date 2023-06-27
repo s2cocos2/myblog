@@ -3,11 +3,13 @@ package com.sparta.myblog.repository;
 import com.sparta.myblog.dto.MyblogRequestDto;
 import com.sparta.myblog.dto.MyblogResponseDto;
 import com.sparta.myblog.entity.Myblog;
+import jakarta.persistence.EntityManager;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -90,5 +92,17 @@ public class MyblogRepository {
                 return null;
             }
         }, id);
+    }
+
+    @Transactional
+    public Myblog createMyblog(EntityManager em){
+        Myblog myblog = em.find(Myblog.class, 1);
+        myblog.setUsername("Robbert");
+        myblog.setPassword("1234");
+        myblog.setTitle("test1제목");
+        myblog.setContents("@Transactional 테스트 중!");
+
+        System.out.println("createMyblog 메서드 종료");
+        return myblog;
     }
 }
