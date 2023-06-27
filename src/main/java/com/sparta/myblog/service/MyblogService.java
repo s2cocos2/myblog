@@ -38,7 +38,7 @@ public class MyblogService {
     @Transactional
     public Long updateMyblog(Long id, MyblogRequestDto requestDto) {
         //해당 글이 DB에 존재하는지 확인
-        Myblog myblog = findMyblog(id);
+        Myblog myblog = findMyblog(id, requestDto);
 
         //글 내용 수정
         myblog.update(requestDto);
@@ -46,9 +46,9 @@ public class MyblogService {
         return id;
     }
 
-    public Long deleteMyblog(Long id) {
+    public Long deleteMyblog(Long id, MyblogRequestDto requestDto) {
         //해당 글이 DB에 존재하는지 확인
-        Myblog myblog = findMyblog(id);
+        Myblog myblog = findMyblog(id, requestDto);
 
         //해당 글 삭제하기
         myblogRepository.delete(myblog);
@@ -56,8 +56,15 @@ public class MyblogService {
         return id;
     }
 
-    private Myblog findMyblog(Long id){
-        return myblogRepository.findById(id).orElseThrow(()->
+    private Myblog findMyblog(Long id, MyblogRequestDto requestDto){
+        Myblog myblog = myblogRepository.findById(id).orElseThrow(()->
                 new IllegalArgumentException("선택한 글은 존재하지 않습니다."));
+
+        //비밀번호 확인
+        if(!myblog.getPassword().equals(requestDto.getPassword())){
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        return myblog;
     }
+
 }

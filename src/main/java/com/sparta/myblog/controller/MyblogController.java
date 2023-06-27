@@ -32,7 +32,7 @@ public class MyblogController {
     }
 
     @DeleteMapping("/blog/{id}")
-    public Long deleteMyblog(@PathVariable Long id){
-        return myblogService.deleteMyblog(id);
+    public Long deleteMyblog(@PathVariable Long id, @RequestBody MyblogRequestDto requestDto){
+        return myblogService.deleteMyblog(id, requestDto);
     }
 }
