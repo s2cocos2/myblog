@@ -32,7 +32,7 @@ public class MyblogService {
 
     public List<MyblogResponseDto> getMyblog() {
         //DB 조회
-        return myblogRepository.findAll().stream().map(MyblogResponseDto::new).toList();
+        return myblogRepository.findAllByOrderByModifiedAtDesc().stream().map(MyblogResponseDto::new).toList();
     }
 
     @Transactional
