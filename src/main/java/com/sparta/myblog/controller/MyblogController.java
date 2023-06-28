@@ -26,6 +26,12 @@ public class MyblogController {
         return myblogService.getMyblog();
     }
 
+    //조회기능 추가
+    @GetMapping("/blog/{id}")
+    public MyblogResponseDto getMyblog(@PathVariable Long id, @RequestBody MyblogRequestDto requestDto){
+        return myblogService.getMyblog(id, requestDto);
+    }
+
     @PutMapping("/blog/{id}")
     public Long updateMyblog(@PathVariable Long id, @RequestBody MyblogRequestDto requestDto){
         return myblogService.updateMyblog(id, requestDto);

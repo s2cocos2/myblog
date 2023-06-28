@@ -56,6 +56,16 @@ public class MyblogService {
         return id;
     }
 
+    //글 조회기능 추가
+    public MyblogResponseDto getMyblog(Long id, MyblogRequestDto requestDto) {
+        //해당 글이 DB에 존재하는지 확인
+        Myblog myblog = findMyblog(id, requestDto);
+
+        MyblogResponseDto myblogResponseDto = new MyblogResponseDto(myblog);
+
+        return myblogResponseDto;
+    }
+
     private Myblog findMyblog(Long id, MyblogRequestDto requestDto){
         Myblog myblog = myblogRepository.findById(id).orElseThrow(()->
                 new IllegalArgumentException("선택한 글은 존재하지 않습니다."));
@@ -66,5 +76,4 @@ public class MyblogService {
         }
         return myblog;
     }
-
 }
